@@ -12,17 +12,20 @@ import javax.persistence.TemporalType;
 @Entity
 public class Employee {
 
+	// We declare id as the primary key which will auto increment
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public long id;
 
 	public String name;
-	public String gender; 
+	public String gender;
 	public String department;
 	public long salary;
 
+	// Setting the date format for sql
 	@Temporal(TemporalType.DATE)
 	public Date date;
+
 	public String notes;
 
 	public Employee() {
