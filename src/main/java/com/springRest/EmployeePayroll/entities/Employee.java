@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.springRest.EmployeePayroll.dto.EmployeeDTO;
+
 @Entity
 public class Employee {
 
@@ -36,14 +38,76 @@ public class Employee {
 		return id;
 	}
 
-	public Employee(String name, String lastName, String gender, String department, long salary, Date date,
-			String notes) {
+	public Employee(EmployeeDTO employee) {
 		super();
+		this.name = employee.name;
+		this.gender = employee.gender;
+		this.department = employee.department;
+		this.salary = employee.salary;
+		this.date = employee.date;
+		this.notes = employee.notes;
+	}
+
+	public Employee(long id, EmployeeDTO employee) {
+		super();
+		this.id = id;
+		this.name = employee.name;
+		this.gender = employee.gender;
+		this.department = employee.department;
+		this.salary = employee.salary;
+		this.date = employee.date;
+		this.notes = employee.notes;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public String getDepartment() {
+		return department;
+	}
+
+	public long getSalary() {
+		return salary;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setName(String name) {
 		this.name = name;
+	}
+
+	public void setGender(String gender) {
 		this.gender = gender;
+	}
+
+	public void setDepartment(String department) {
 		this.department = department;
+	}
+
+	public void setSalary(long salary) {
 		this.salary = salary;
+	}
+
+	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	public void setNotes(String notes) {
 		this.notes = notes;
 	}
 

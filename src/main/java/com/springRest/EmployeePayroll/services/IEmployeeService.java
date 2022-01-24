@@ -1,17 +1,22 @@
 package com.springRest.EmployeePayroll.services;
 
-import com.springRest.EmployeePayroll.entities.Employee;
+import java.util.Optional;
+
+import org.springframework.http.ResponseEntity;
+
+import com.springRest.EmployeePayroll.dto.EmployeeDTO;
+import com.springRest.EmployeePayroll.dto.ResponseDTO;
 
 public interface IEmployeeService {
 
-	public String helloWorld();
+	public ResponseEntity<String> helloWorld();
 
-	public Employee getEmployee(String id);
+	public ResponseEntity<ResponseDTO> getEmployee(Optional<String> id);
 
-	public Employee postEmployee(Employee employee);
+	public ResponseEntity<ResponseDTO> postEmployee(EmployeeDTO employee);
 
-	public Employee updateEmployee(Employee employee);
+	public ResponseEntity<ResponseDTO> updateEmployee(String id, EmployeeDTO employee);
 
-	public String deleteEmployee(String id);
+	public ResponseEntity<ResponseDTO> deleteEmployee(String id);
 
 }

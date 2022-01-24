@@ -1,10 +1,15 @@
 package com.springRest.EmployeePayroll.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.springRest.EmployeePayroll.dto.EmployeeDTO;
+import com.springRest.EmployeePayroll.dto.ResponseDTO;
 import com.springRest.EmployeePayroll.entities.Employee;
 import com.springRest.EmployeePayroll.repo.EmployeeRepository;
 
@@ -18,50 +23,78 @@ public class EmployeeService implements IEmployeeService {
 
 	// This method prints the default hello world message
 	@Override
-	public String helloWorld() {
+	public ResponseEntity<String> helloWorld() {
 		// TODO Auto-generated method stub
-		return "Hello World!";
+//		return new ResponseEntity<ResponseDTO>(new ResponseDTO(" Hello World!", null), HttpStatus.OK);
+		return new ResponseEntity<String>("Hello World", HttpStatus.OK);
+		
 	}
 
 	// This will return the employee we search for by id
 	@Override
-	public Employee getEmployee(String id) {
+	public ResponseEntity<ResponseDTO> getEmployee(Optional<String> id) {
 		// TODO Auto-generated method stub
-		Optional<Employee> employee = employeeRepository.findById(Long.parseLong(id));
+		System.out.println(" We called the get method");
+		ResponseDTO responseDto;
+		if (id.isEmpty()) {
+			List<Employee> empData = (List<Employee>) employeeRepository.findAll();
+			responseDto = new ResponseDTO("Returning all the records stored in the db ", empData);
+			ResponseEntity<ResponseDTO> responseThing = new ResponseEntity<ResponseDTO>(responseDto, HttpStatus.OK);
+			return responseThing;
+		}
+
+		Optional<Employee> employee = employeeRepository.findById(Long.parseLong(id.get()));
+		Employee empData = employee.orElse(null);
+
 		if (employee.isPresent()) {
-			return employee.get();
-		} else
-			return null;
+			responseDto = new ResponseDTO("Found the employee record ", empData);
+			return new ResponseEntity<ResponseDTO>(new ResponseDTO("Found the employee record ", empData), HttpStatus.OK);
+		}
+
+		else {
+			responseDto = new ResponseDTO("ERROR: Could not find the employee record! ", empData);
+			return new ResponseEntity<ResponseDTO>(responseDto, HttpStatus.NOT_FOUND);
+		}
+
 	}
 
 	// This will insert a new employee into the database
 	@Override
-	public Employee postEmployee(Employee employee) {
+	public ResponseEntity<ResponseDTO> postEmployee(EmployeeDTO employee) {
 		// TODO Auto-generated method stub
-		return employeeRepository.save(employee);
+		Employee empData = employeeRepository.save(new Employee(employee));
+		ResponseDTO responseDto = new ResponseDTO("New Employee record has been stored successfully", empData);
+		return new ResponseEntity<>(responseDto, HttpStatus.OK);
 	}
 
 	// This will update an existing employee in the database
 	@Override
-	public Employee updateEmployee(Employee employee) {
+	public ResponseEntity<ResponseDTO> updateEmployee(String id, EmployeeDTO employee) {
 		// TODO Auto-generated method stub
-		Optional<Employee> emp = employeeRepository.findById(employee.getId());
+		Optional<Employee> emp = employeeRepository.findById(Long.parseLong(id));
+		Employee empData = null;
+		String message = " ERROR: Employee record not found!";
+		HttpStatus status = HttpStatus.NOT_FOUND;
 		if (emp.isPresent()) {
-			return employeeRepository.save(employee);
+			empData = employeeRepository.save(new Employee(Long.parseLong(id), employee));
+			message = " Employee record has been deleted";
+			status = HttpStatus.OK;
 		}
 
-		return null;
+		ResponseDTO responseDto = new ResponseDTO(message, empData);
+		return new ResponseEntity<>(responseDto, status);
 	}
 
 	// This will delete an employee record from the database
 	@Override
-	public String deleteEmployee(String id) {
+	public ResponseEntity<ResponseDTO> deleteEmployee(String id) {
 		// TODO Auto-generated method stub
 		if (employeeRepository.findById(Long.parseLong(id)).isPresent()) {
 			employeeRepository.deleteById(Long.parseLong(id));
-			return " Employee record deleted!";
+			return new ResponseEntity<ResponseDTO>(new ResponseDTO(" Employee record deleted!", null), HttpStatus.OK);
 		} else
-			return " No such employee record found!";
+			return new ResponseEntity<ResponseDTO>(new ResponseDTO("ERROR: No such employee record found!", null),
+					HttpStatus.NOT_FOUND);
 	}
 
 }

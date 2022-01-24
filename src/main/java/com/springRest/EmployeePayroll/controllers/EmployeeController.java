@@ -1,6 +1,9 @@
 package com.springRest.EmployeePayroll.controllers;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.springRest.EmployeePayroll.entities.Employee;
+import com.springRest.EmployeePayroll.dto.EmployeeDTO;
+import com.springRest.EmployeePayroll.dto.ResponseDTO;
 import com.springRest.EmployeePayroll.services.IEmployeeService;
 
 // This is the rest controller, it is monitoring the /employeepayrollservice endpoint
@@ -24,32 +28,32 @@ public class EmployeeController {
 
 	// This will display the default hello world message
 	@GetMapping(value = { "", "/" })
-	public String hello() {
+	public ResponseEntity<String> hello() {
 		return employeeService.helloWorld();
 	}
 
 	// This will call the service layer to get an employee we search for by id
-	@GetMapping("/get/{id}")
-	public Employee getEmployee(@PathVariable String id) {
+	@GetMapping(value = {"/get/{id}", "/get", "/get/"})
+	public ResponseEntity<ResponseDTO> getEmployee(@PathVariable Optional<String> id) {
 		return employeeService.getEmployee(id);
 	}
 
 	// This will call the service layer to create a new employee record in the
 	// database
 	@PostMapping("/create")
-	public Employee postEmployee(@RequestBody Employee employee) {
+	public ResponseEntity<ResponseDTO> postEmployee(@RequestBody EmployeeDTO employee) {
 		return employeeService.postEmployee(employee);
 	}
 
 	// This will call the service layer to update an employee record
-	@PutMapping("/update")
-	public Employee updateEmployee(@RequestBody Employee employee) {
-		return employeeService.updateEmployee(employee);
+	@PutMapping("/update/{id}")
+	public ResponseEntity<ResponseDTO> updateEmployee(@PathVariable String id, @RequestBody EmployeeDTO employee) {
+		return employeeService.updateEmployee(id, employee);
 	}
 
 	// This will delete an employee record, specified by id, from the database
 	@DeleteMapping("/delete/{id}")
-	public String deleteEmployee(@PathVariable String id) {
+	public ResponseEntity<ResponseDTO> deleteEmployee(@PathVariable String id) {
 		return employeeService.deleteEmployee(id);
 	}
 }
