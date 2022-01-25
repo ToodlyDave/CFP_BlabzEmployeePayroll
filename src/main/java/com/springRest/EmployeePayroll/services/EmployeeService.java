@@ -13,8 +13,11 @@ import com.springRest.EmployeePayroll.dto.ResponseDTO;
 import com.springRest.EmployeePayroll.entities.Employee;
 import com.springRest.EmployeePayroll.repo.EmployeeRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 // We declare this as a service so that it shows up as a component in autoscanning
 @Service
+@Slf4j
 public class EmployeeService implements IEmployeeService {
 
 	// We inject the employee repo into the service
@@ -25,7 +28,7 @@ public class EmployeeService implements IEmployeeService {
 	@Override
 	public ResponseEntity<String> helloWorld() {
 		// TODO Auto-generated method stub
-//		return new ResponseEntity<ResponseDTO>(new ResponseDTO(" Hello World!", null), HttpStatus.OK);
+		log.info("Responding with welcome message");
 		return new ResponseEntity<String>("Hello World", HttpStatus.OK);
 		
 	}
@@ -34,7 +37,7 @@ public class EmployeeService implements IEmployeeService {
 	@Override
 	public ResponseEntity<ResponseDTO> getEmployee(Optional<String> id) {
 		// TODO Auto-generated method stub
-		System.out.println(" We called the get method");
+		log.info("We are retrieving employee information from the db");
 		ResponseDTO responseDto;
 		if (id.isEmpty()) {
 			List<Employee> empData = (List<Employee>) employeeRepository.findAll();
@@ -62,6 +65,7 @@ public class EmployeeService implements IEmployeeService {
 	@Override
 	public ResponseEntity<ResponseDTO> postEmployee(EmployeeDTO employee) {
 		// TODO Auto-generated method stub
+		log.info("We are saving a new employee record in the db");
 		Employee empData = employeeRepository.save(new Employee(employee));
 		ResponseDTO responseDto = new ResponseDTO("New Employee record has been stored successfully", empData);
 		return new ResponseEntity<>(responseDto, HttpStatus.OK);
@@ -71,6 +75,7 @@ public class EmployeeService implements IEmployeeService {
 	@Override
 	public ResponseEntity<ResponseDTO> updateEmployee(String id, EmployeeDTO employee) {
 		// TODO Auto-generated method stub
+		log.info("We are updating an employee record in the db");
 		Optional<Employee> emp = employeeRepository.findById(Long.parseLong(id));
 		Employee empData = null;
 		String message = " ERROR: Employee record not found!";
@@ -89,6 +94,7 @@ public class EmployeeService implements IEmployeeService {
 	@Override
 	public ResponseEntity<ResponseDTO> deleteEmployee(String id) {
 		// TODO Auto-generated method stub
+		log.info("We are deleting an employee record");
 		if (employeeRepository.findById(Long.parseLong(id)).isPresent()) {
 			employeeRepository.deleteById(Long.parseLong(id));
 			return new ResponseEntity<ResponseDTO>(new ResponseDTO(" Employee record deleted!", null), HttpStatus.OK);
