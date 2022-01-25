@@ -1,22 +1,14 @@
 package com.springRest.EmployeePayroll.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NonNull;
+
+@Getter
+@AllArgsConstructor
 public class ResponseDTO {
 
-	String message;
+	private @NonNull String message;
 	Object data;
-
-	public ResponseDTO(String message, Object data) {
-		super();
-		this.message = message;
-		this.data = data;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public Object getData() {
-		return data;
-	}
 
 }

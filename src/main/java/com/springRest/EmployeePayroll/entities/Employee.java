@@ -11,7 +11,12 @@ import javax.persistence.TemporalType;
 
 import com.springRest.EmployeePayroll.dto.EmployeeDTO;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
+@Data
+@NoArgsConstructor
 public class Employee {
 
 	// We declare id as the primary key which will auto increment
@@ -30,13 +35,6 @@ public class Employee {
 
 	public String notes;
 
-	public Employee() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public long getId() {
-		return id;
-	}
 
 	public Employee(EmployeeDTO employee) {
 		super();
@@ -57,58 +55,6 @@ public class Employee {
 		this.salary = employee.salary;
 		this.date = employee.date;
 		this.notes = employee.notes;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getGender() {
-		return gender;
-	}
-
-	public String getDepartment() {
-		return department;
-	}
-
-	public long getSalary() {
-		return salary;
-	}
-
-	public Date getDate() {
-		return date;
-	}
-
-	public String getNotes() {
-		return notes;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-
-	public void setDepartment(String department) {
-		this.department = department;
-	}
-
-	public void setSalary(long salary) {
-		this.salary = salary;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
-	public void setNotes(String notes) {
-		this.notes = notes;
 	}
 
 }
