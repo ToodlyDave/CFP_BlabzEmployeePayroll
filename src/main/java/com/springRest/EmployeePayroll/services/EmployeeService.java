@@ -3,6 +3,8 @@ package com.springRest.EmployeePayroll.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -73,7 +75,7 @@ public class EmployeeService implements IEmployeeService {
 
 	// This will update an existing employee in the database
 	@Override
-	public ResponseEntity<ResponseDTO> updateEmployee(String id, EmployeeDTO employee) {
+	public ResponseEntity<ResponseDTO> updateEmployee(String id, @Valid EmployeeDTO employee) {
 		// TODO Auto-generated method stub
 		log.info("We are updating an employee record in the db");
 		Optional<Employee> emp = employeeRepository.findById(Long.parseLong(id));
@@ -82,7 +84,7 @@ public class EmployeeService implements IEmployeeService {
 		HttpStatus status = HttpStatus.NOT_FOUND;
 		if (emp.isPresent()) {
 			empData = employeeRepository.save(new Employee(Long.parseLong(id), employee));
-			message = " Employee record has been deleted";
+			message = " Employee record has been updated";
 			status = HttpStatus.OK;
 		}
 
