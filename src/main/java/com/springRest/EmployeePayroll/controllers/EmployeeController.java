@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springRest.EmployeePayroll.dto.EmployeeDTO;
 import com.springRest.EmployeePayroll.dto.ResponseDTO;
+import com.springRest.EmployeePayroll.exceptions.EmployeeNotFound;
 import com.springRest.EmployeePayroll.services.IEmployeeService;
 
 // This is the rest controller, it is monitoring the /employeepayrollservice endpoint
@@ -36,7 +37,7 @@ public class EmployeeController {
 
 	// This will call the service layer to get an employee we search for by id
 	@GetMapping(value = {"/get/{id}", "/get", "/get/"})
-	public ResponseEntity<ResponseDTO> getEmployee(@PathVariable Optional<String> id) {
+	public ResponseEntity<ResponseDTO> getEmployee(@PathVariable Optional<String> id) throws EmployeeNotFound {
 		return employeeService.getEmployee(id);
 	}
 
@@ -49,13 +50,13 @@ public class EmployeeController {
 
 	// This will call the service layer to update an employee record
 	@PutMapping("/update/{id}")
-	public ResponseEntity<ResponseDTO> updateEmployee(@PathVariable String id, @Valid @RequestBody EmployeeDTO employee) {
+	public ResponseEntity<ResponseDTO> updateEmployee(@PathVariable String id, @Valid @RequestBody EmployeeDTO employee) throws EmployeeNotFound {
 		return employeeService.updateEmployee(id, employee);
 	}
 
 	// This will delete an employee record, specified by id, from the database
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<ResponseDTO> deleteEmployee(@PathVariable String id) {
+	public ResponseEntity<ResponseDTO> deleteEmployee(@PathVariable String id) throws EmployeeNotFound {
 		return employeeService.deleteEmployee(id);
 	}
 }

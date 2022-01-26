@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.springRest.EmployeePayroll.dto.EmployeeDTO;
 import com.springRest.EmployeePayroll.dto.ResponseDTO;
 import com.springRest.EmployeePayroll.entities.Employee;
+import com.springRest.EmployeePayroll.exceptions.EmployeeNotFound;
 import com.springRest.EmployeePayroll.repo.EmployeeRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,7 @@ public class EmployeeService implements IEmployeeService {
 
 	// This will return the employee we search for by id
 	@Override
-	public ResponseEntity<ResponseDTO> getEmployee(Optional<String> id) {
+	public ResponseEntity<ResponseDTO> getEmployee(Optional<String> id) throws EmployeeNotFound {
 		// TODO Auto-generated method stub
 		log.info("We are retrieving employee information from the db");
 		ResponseDTO responseDto;
@@ -57,8 +58,7 @@ public class EmployeeService implements IEmployeeService {
 		}
 
 		else {
-			responseDto = new ResponseDTO("ERROR: Could not find the employee record! ", empData);
-			return new ResponseEntity<ResponseDTO>(responseDto, HttpStatus.NOT_FOUND);
+			throw new EmployeeNotFound("ERROR: Could not find the employee record! ");
 		}
 
 	}
@@ -75,34 +75,32 @@ public class EmployeeService implements IEmployeeService {
 
 	// This will update an existing employee in the database
 	@Override
-	public ResponseEntity<ResponseDTO> updateEmployee(String id, @Valid EmployeeDTO employee) {
+	public ResponseEntity<ResponseDTO> updateEmployee(String id, @Valid EmployeeDTO employee) throws EmployeeNotFound {
 		// TODO Auto-generated method stub
 		log.info("We are updating an employee record in the db");
 		Optional<Employee> emp = employeeRepository.findById(Long.parseLong(id));
-		Employee empData = null;
-		String message = " ERROR: Employee record not found!";
-		HttpStatus status = HttpStatus.NOT_FOUND;
-		if (emp.isPresent()) {
-			empData = employeeRepository.save(new Employee(Long.parseLong(id), employee));
-			message = " Employee record has been updated";
-			status = HttpStatus.OK;
+		
+		if (emp.isEmpty()) {
+			throw new EmployeeNotFound(" ERROR: Employee record not found!");
 		}
 
-		ResponseDTO responseDto = new ResponseDTO(message, empData);
-		return new ResponseEntity<>(responseDto, status);
+		Employee empData = employeeRepository.save(new Employee(Long.parseLong(id), employee));
+
+		ResponseDTO responseDto = new ResponseDTO(" Employee record has been updated", empData);
+		return new ResponseEntity<>(responseDto, HttpStatus.OK);
 	}
 
 	// This will delete an employee record from the database
 	@Override
-	public ResponseEntity<ResponseDTO> deleteEmployee(String id) {
+	public ResponseEntity<ResponseDTO> deleteEmployee(String id) throws EmployeeNotFound {
 		// TODO Auto-generated method stub
 		log.info("We are deleting an employee record");
 		if (employeeRepository.findById(Long.parseLong(id)).isPresent()) {
 			employeeRepository.deleteById(Long.parseLong(id));
 			return new ResponseEntity<ResponseDTO>(new ResponseDTO(" Employee record deleted!", null), HttpStatus.OK);
-		} else
-			return new ResponseEntity<ResponseDTO>(new ResponseDTO("ERROR: No such employee record found!", null),
-					HttpStatus.NOT_FOUND);
+		} 
+		else
+			throw new EmployeeNotFound("ERROR: No such employee record found!");
 	}
 
 }
