@@ -6,7 +6,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,7 +49,7 @@ public class EmployeeController {
 
 	// This will call the service layer to update an employee record
 	@PutMapping("/update/{id}")
-	public ResponseEntity<ResponseDTO> updateEmployee(@PathVariable String id, @Validated @RequestBody EmployeeDTO employee) throws Exception{
+	public ResponseEntity<ResponseDTO> updateEmployee(@PathVariable String id, @Valid @RequestBody EmployeeDTO employee) {
 		return employeeService.updateEmployee(id, employee);
 	}
 
