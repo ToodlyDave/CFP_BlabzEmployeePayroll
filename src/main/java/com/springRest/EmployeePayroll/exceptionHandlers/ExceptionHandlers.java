@@ -29,7 +29,7 @@ public class ExceptionHandlers {
 	// This is to handle our custom exception when thrown
 	@ExceptionHandler(EmployeeNotFound.class)
 	public ResponseEntity<ResponseDTO> handleEmployeeNotFound(EmployeeNotFound error) {
-		ResponseDTO response = new ResponseDTO("Invalid id input", error.getMessage());
+		ResponseDTO response = new ResponseDTO("Invalid input", error.getMessage());
 		return new ResponseEntity<ResponseDTO>(response, HttpStatus.BAD_REQUEST);
 	}
 

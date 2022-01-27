@@ -59,4 +59,10 @@ public class EmployeeController {
 	public ResponseEntity<ResponseDTO> deleteEmployee(@PathVariable String id) throws EmployeeNotFound {
 		return employeeService.deleteEmployee(id);
 	}
+	
+	// This will return a list of all the employees with the department specified in the request
+	@GetMapping("/find/{dept}")
+	public ResponseEntity<ResponseDTO> findEmployeeDept(@PathVariable String dept) throws EmployeeNotFound {
+		return employeeService.findEmployeeByDept(dept);
+	}
 }

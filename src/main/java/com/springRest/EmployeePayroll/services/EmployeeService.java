@@ -111,4 +111,19 @@ public class EmployeeService implements IEmployeeService {
 			throw new EmployeeNotFound("ERROR: No such employee record found!");
 	}
 
+	// This method will return a list of the employees with the department name passes to it. It calls the custom
+	// query that we have designed in the repository.
+	@Override
+	public ResponseEntity<ResponseDTO> findEmployeeByDept(String department) throws EmployeeNotFound {
+		// TODO Auto-generated method stub
+		List<Employee> employee = employeeRepository.findEmployeeByDepartment(department);
+		
+		if (employee.size() == 0) {
+			throw new EmployeeNotFound("ERROR: No such employee record found!");
+		}
+		
+		ResponseDTO response = new ResponseDTO(" Showing all employee records with the requested department", employee);
+		return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
+	}
+
 }
