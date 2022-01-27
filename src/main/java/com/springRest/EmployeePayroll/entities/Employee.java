@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CollectionTable;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,9 +36,12 @@ public class Employee {
 	public long salary;
 
 	// Setting the date format for sql
+	@Column(name = "start_date")
 	public LocalDate startDate;
 
 	public String notes;
+	
+	@Column(name = "profile_pic")
 	public String profilePic;
 
 	public Employee(EmployeeDTO employee) {
