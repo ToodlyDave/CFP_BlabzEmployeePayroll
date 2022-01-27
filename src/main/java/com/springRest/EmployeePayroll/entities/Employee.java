@@ -1,13 +1,15 @@
 package com.springRest.EmployeePayroll.entities;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.List;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.JoinColumn;
 
 import com.springRest.EmployeePayroll.dto.EmployeeDTO;
 
@@ -26,15 +28,17 @@ public class Employee {
 
 	public String name;
 	public String gender;
-	public String department;
+	
+	@ElementCollection
+	@CollectionTable(name = "employee_department", joinColumns = @JoinColumn(name = "id"))
+	public List<String> department;
 	public long salary;
 
 	// Setting the date format for sql
-	@Temporal(TemporalType.DATE)
-	public Date date;
+	public LocalDate startDate;
 
 	public String notes;
-
+	public String profilePic;
 
 	public Employee(EmployeeDTO employee) {
 		super();
@@ -42,8 +46,9 @@ public class Employee {
 		this.gender = employee.gender;
 		this.department = employee.department;
 		this.salary = employee.salary;
-		this.date = employee.date;
+		this.startDate = employee.startDate;
 		this.notes = employee.notes;
+		this.profilePic = employee.profilePic;
 	}
 
 	public Employee(long id, EmployeeDTO employee) {
@@ -53,7 +58,7 @@ public class Employee {
 		this.gender = employee.gender;
 		this.department = employee.department;
 		this.salary = employee.salary;
-		this.date = employee.date;
+		this.startDate = employee.startDate;
 		this.notes = employee.notes;
 	}
 

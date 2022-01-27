@@ -1,6 +1,7 @@
 package com.springRest.EmployeePayroll.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.List;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -19,8 +20,9 @@ public class EmployeeDTO {
 	public long salary;
 	
 	public String gender;
-	public String department;
-	public Date date;
+	public List<String> department;
+	public LocalDate startDate;
 	public String notes;
+	public String profilePic;
 
 }
