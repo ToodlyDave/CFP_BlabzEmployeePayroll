@@ -33,10 +33,12 @@ public class EmployeeService implements IEmployeeService {
 		// TODO Auto-generated method stub
 		log.info("Responding with welcome message");
 		return new ResponseEntity<String>("Hello World", HttpStatus.OK);
-		
+
 	}
 
-	// This will return the employee we search for by id
+	// This will return the employee we search for by id. If it doesn't find the
+	// record of the given id it will
+	// throw a custom exception. Which is handled by our custom exception handler.
 	@Override
 	public ResponseEntity<ResponseDTO> getEmployee(Optional<String> id) throws EmployeeNotFound {
 		// TODO Auto-generated method stub
@@ -54,7 +56,8 @@ public class EmployeeService implements IEmployeeService {
 
 		if (employee.isPresent()) {
 			responseDto = new ResponseDTO("Found the employee record ", empData);
-			return new ResponseEntity<ResponseDTO>(new ResponseDTO("Found the employee record ", empData), HttpStatus.OK);
+			return new ResponseEntity<ResponseDTO>(new ResponseDTO("Found the employee record ", empData),
+					HttpStatus.OK);
 		}
 
 		else {
@@ -63,7 +66,9 @@ public class EmployeeService implements IEmployeeService {
 
 	}
 
-	// This will insert a new employee into the database
+	// This will insert a new employee into the database. It will go through
+	// validation and will throw an error if
+	// the validation doesn't pass.
 	@Override
 	public ResponseEntity<ResponseDTO> postEmployee(EmployeeDTO employee) {
 		// TODO Auto-generated method stub
@@ -73,13 +78,15 @@ public class EmployeeService implements IEmployeeService {
 		return new ResponseEntity<>(responseDto, HttpStatus.OK);
 	}
 
-	// This will update an existing employee in the database
+	// This will update an existing employee in the database. If it doesn't find the
+	// record of the given id it will
+	// throw a custom exception. Which is handled by our custom exception handler.
 	@Override
 	public ResponseEntity<ResponseDTO> updateEmployee(String id, @Valid EmployeeDTO employee) throws EmployeeNotFound {
 		// TODO Auto-generated method stub
 		log.info("We are updating an employee record in the db");
 		Optional<Employee> emp = employeeRepository.findById(Long.parseLong(id));
-		
+
 		if (emp.isEmpty()) {
 			throw new EmployeeNotFound(" ERROR: Employee record not found!");
 		}
@@ -90,7 +97,9 @@ public class EmployeeService implements IEmployeeService {
 		return new ResponseEntity<>(responseDto, HttpStatus.OK);
 	}
 
-	// This will delete an employee record from the database
+	// This will delete an employee record from the database. If it doesn't find the
+	// record of the given id it will
+	// throw a custom exception. Which is handled by our custom exception handler.
 	@Override
 	public ResponseEntity<ResponseDTO> deleteEmployee(String id) throws EmployeeNotFound {
 		// TODO Auto-generated method stub
@@ -98,8 +107,7 @@ public class EmployeeService implements IEmployeeService {
 		if (employeeRepository.findById(Long.parseLong(id)).isPresent()) {
 			employeeRepository.deleteById(Long.parseLong(id));
 			return new ResponseEntity<ResponseDTO>(new ResponseDTO(" Employee record deleted!", null), HttpStatus.OK);
-		} 
-		else
+		} else
 			throw new EmployeeNotFound("ERROR: No such employee record found!");
 	}
 

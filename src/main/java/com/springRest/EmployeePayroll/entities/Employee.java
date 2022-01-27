@@ -64,6 +64,7 @@ public class Employee {
 		this.salary = employee.salary;
 		this.startDate = employee.startDate;
 		this.notes = employee.notes;
+		this.profilePic = employee.profilePic;
 	}
 
 }
