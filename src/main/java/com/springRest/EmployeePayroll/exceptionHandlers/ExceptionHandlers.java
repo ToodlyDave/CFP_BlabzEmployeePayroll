@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,6 +15,12 @@ import com.springRest.EmployeePayroll.exceptions.EmployeeNotFound;
 
 @ControllerAdvice
 public class ExceptionHandlers {
+	
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	public ResponseEntity<ResponseDTO> handleInvalidDate(HttpMessageNotReadableException error) {
+		ResponseDTO response = new ResponseDTO("Invalid start date input", error.getMessage());
+		return new ResponseEntity<ResponseDTO>(response, HttpStatus.BAD_REQUEST);
+	}
 	
 	@ExceptionHandler(EmployeeNotFound.class)
 	public ResponseEntity<ResponseDTO> handleEmployeeNotFound(EmployeeNotFound error) {
