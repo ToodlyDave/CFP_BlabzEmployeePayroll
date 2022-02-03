@@ -25,34 +25,39 @@ public class Employee {
 	// We declare id as the primary key which will auto increment
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	public long id;
+	private long id;
 
-	public String name;
-	public String gender;
+	private String name;
+	private String email;
+	private String gender;
 
 	@ElementCollection
 	@CollectionTable(name = "employee_department", joinColumns = @JoinColumn(name = "id"))
-	public List<String> department;
-	public long salary;
+	private List<String> department;
+	private long salary;
 
 	// Setting the date format for sql
 	@Column(name = "start_date")
-	public LocalDate startDate;
+	private LocalDate startDate;
 
-	public String notes;
+	private String notes;
 
 	@Column(name = "profile_pic")
-	public String profilePic;
+	private String profilePic;
+	
+	private boolean verified;
 
 	public Employee(EmployeeDTO employee) {
 		super();
 		this.name = employee.name;
+		this.email = employee.email;
 		this.gender = employee.gender;
 		this.department = employee.department;
 		this.salary = employee.salary;
 		this.startDate = employee.startDate;
 		this.notes = employee.notes;
 		this.profilePic = employee.profilePic;
+		this.verified = false;
 	}
 
 }

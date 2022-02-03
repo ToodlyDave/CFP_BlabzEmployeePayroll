@@ -19,6 +19,9 @@ public class EmployeeDTO {
 	@Pattern(regexp = "^([A-Z][a-zA-Z]{2,}[ ]?)+$", message = "ERROR: Please enter a valid name!")
 	public String name;
 	
+	@NotNull
+	public String email;
+	
 	@NotNull(message = "ERROR: Salary cannot be null!")
 	@Min(value = 5000, message = "ERROR: Please enter a salary greater than 5000")
 	public long salary;

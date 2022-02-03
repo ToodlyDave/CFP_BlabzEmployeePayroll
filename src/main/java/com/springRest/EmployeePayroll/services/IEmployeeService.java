@@ -22,4 +22,6 @@ public interface IEmployeeService {
 	public ResponseEntity<ResponseDTO> deleteEmployee(String id, String token) throws EmployeeNotFound;
 
 	public ResponseEntity<ResponseDTO> findEmployeeByDept(String department, String token) throws EmployeeNotFound;
+
+	public ResponseEntity<ResponseDTO> verify(String token);
 }

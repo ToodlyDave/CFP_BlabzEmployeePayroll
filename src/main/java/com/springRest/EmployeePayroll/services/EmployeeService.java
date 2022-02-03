@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.springRest.EmployeePayroll.dto.EmployeeDTO;
 import com.springRest.EmployeePayroll.dto.ResponseDTO;
+import com.springRest.EmployeePayroll.entities.Email;
 import com.springRest.EmployeePayroll.entities.Employee;
 import com.springRest.EmployeePayroll.exceptions.EmployeeNotFound;
 import com.springRest.EmployeePayroll.repo.EmployeeRepository;
@@ -33,6 +34,10 @@ public class EmployeeService implements IEmployeeService {
 	// We inject the token utilities into the service
 	@Autowired
 	TokenUtil tokenUtil;
+	
+	// We inject the mail services here
+	@Autowired
+	IMailServices mailer;
 
 	// This method prints the default hello world message
 	@Override
@@ -58,6 +63,11 @@ public class EmployeeService implements IEmployeeService {
 
 		if (tokenEmployee.isEmpty()) {
 			responseDto = new ResponseDTO("ERROR: This is not an authorized user!", null, token);
+			return new ResponseEntity<ResponseDTO>(responseDto, HttpStatus.UNAUTHORIZED);
+		}
+		
+		if (!tokenEmployee.get().isVerified()) {
+			responseDto = new ResponseDTO("ERROR: This is not an verified user!", null, token);
 			return new ResponseEntity<ResponseDTO>(responseDto, HttpStatus.UNAUTHORIZED);
 		}
 
@@ -91,6 +101,10 @@ public class EmployeeService implements IEmployeeService {
 		log.info("We are saving a new employee record in the db");
 		Employee empData = employeeRepository.save(new Employee(employee));
 		String token = tokenUtil.createToken(empData.getId());
+		
+		Email email = new Email(empData.getEmail(), "verification email", empData.getName() + " => " + mailer.getLink(token));
+		mailer.sendEmail(email);
+		
 		ResponseDTO responseDto = new ResponseDTO("New Employee record has been stored successfully", empData, token);
 		return new ResponseEntity<>(responseDto, HttpStatus.OK);
 	}
@@ -175,6 +189,25 @@ public class EmployeeService implements IEmployeeService {
 		ResponseDTO response = new ResponseDTO(" Showing all employee records with the requested department", employee,
 				null);
 		return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
+	}
+
+	// This will check if the token passed to it is valid. Then it will update the employee record to
+	// make it a verified employee.
+	@Override
+	public ResponseEntity<ResponseDTO> verify(String token) {
+		// TODO Auto-generated method stub
+		
+		Optional<Employee> employee = employeeRepository.findById(tokenUtil.decodeToken(token));
+		if (employee.isEmpty()) {
+			ResponseDTO responseDTO = new ResponseDTO("ERROR: Invalid token", null, token);
+			return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.UNAUTHORIZED);
+		}
+		
+		employee.get().setVerified(true); 
+		employeeRepository.save(employee.get());
+		
+		ResponseDTO responseDTO = new ResponseDTO(" The employee has been verified ", employee, token);
+		return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
 	}
 
 }
