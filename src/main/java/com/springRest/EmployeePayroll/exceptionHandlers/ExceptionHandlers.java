@@ -10,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.springRest.EmployeePayroll.dto.ResponseDTO;
 import com.springRest.EmployeePayroll.exceptions.EmployeeNotFound;
 
@@ -22,14 +23,14 @@ public class ExceptionHandlers {
 	// specified.
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<ResponseDTO> handleInvalidDate(HttpMessageNotReadableException error) {
-		ResponseDTO response = new ResponseDTO("Invalid start date input", error.getMessage());
+		ResponseDTO response = new ResponseDTO("Invalid start date input", error.getMessage(), null);
 		return new ResponseEntity<ResponseDTO>(response, HttpStatus.BAD_REQUEST);
 	}
 
 	// This is to handle our custom exception when thrown
 	@ExceptionHandler(EmployeeNotFound.class)
 	public ResponseEntity<ResponseDTO> handleEmployeeNotFound(EmployeeNotFound error) {
-		ResponseDTO response = new ResponseDTO("Invalid input", error.getMessage());
+		ResponseDTO response = new ResponseDTO("Invalid input", error.getMessage(), null);
 		return new ResponseEntity<ResponseDTO>(response, HttpStatus.BAD_REQUEST);
 	}
 
@@ -39,7 +40,41 @@ public class ExceptionHandlers {
 		List<String> errorMessage = error.getAllErrors().stream().map(errorObject -> errorObject.getDefaultMessage())
 				.collect(Collectors.toList());
 
-		ResponseDTO response = new ResponseDTO("Invalid input", errorMessage);
+		ResponseDTO response = new ResponseDTO("Invalid input", errorMessage, null);
 		return new ResponseEntity<ResponseDTO>(response, HttpStatus.BAD_REQUEST);
 	}
+	
+	// This is to handle the invalid tokens passed
+	@ExceptionHandler(SignatureVerificationException.class)
+	public ResponseEntity<ResponseDTO> handleInvalidToken(SignatureVerificationException error) {
+		
+		ResponseDTO response = new ResponseDTO("Invalid token", error.getMessage(), null);
+		return new ResponseEntity<ResponseDTO>(response, HttpStatus.UNAUTHORIZED);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

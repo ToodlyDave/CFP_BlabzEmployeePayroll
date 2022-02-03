@@ -29,7 +29,7 @@ public class Employee {
 
 	public String name;
 	public String gender;
-	
+
 	@ElementCollection
 	@CollectionTable(name = "employee_department", joinColumns = @JoinColumn(name = "id"))
 	public List<String> department;
@@ -40,24 +40,12 @@ public class Employee {
 	public LocalDate startDate;
 
 	public String notes;
-	
+
 	@Column(name = "profile_pic")
 	public String profilePic;
 
 	public Employee(EmployeeDTO employee) {
 		super();
-		this.name = employee.name;
-		this.gender = employee.gender;
-		this.department = employee.department;
-		this.salary = employee.salary;
-		this.startDate = employee.startDate;
-		this.notes = employee.notes;
-		this.profilePic = employee.profilePic;
-	}
-
-	public Employee(long id, EmployeeDTO employee) {
-		super();
-		this.id = id;
 		this.name = employee.name;
 		this.gender = employee.gender;
 		this.department = employee.department;

@@ -11,6 +11,7 @@ import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+// This is the dto for the employee entity. The client will send us objects of this dto.
 public class EmployeeDTO {
 
 	@NotNull(message = "ERROR: Name cannot be null!")

@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.springRest.EmployeePayroll.entities.Employee;
 
+// This is the repo layer. This is the one that actually launches the queries at the database.
 public interface EmployeeRepository extends JpaRepository<Employee, Long>{
 
 	@Query(value = "SELECT * FROM employee e, employee_department ed WHERE e.id = ed.id AND ed.department = :dept", nativeQuery = true)

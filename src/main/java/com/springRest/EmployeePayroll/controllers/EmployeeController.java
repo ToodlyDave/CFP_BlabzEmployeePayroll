@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springRest.EmployeePayroll.dto.EmployeeDTO;
@@ -37,8 +38,8 @@ public class EmployeeController {
 
 	// This will call the service layer to get an employee we search for by id
 	@GetMapping(value = {"/get/{id}", "/get", "/get/"})
-	public ResponseEntity<ResponseDTO> getEmployee(@PathVariable Optional<String> id) throws EmployeeNotFound {
-		return employeeService.getEmployee(id);
+	public ResponseEntity<ResponseDTO> getEmployee(@PathVariable Optional<String> id, @RequestParam(name = "token") String token) throws EmployeeNotFound {
+		return employeeService.getEmployee(id, token);
 	}
 
 	// This will call the service layer to create a new employee record in the
@@ -50,19 +51,19 @@ public class EmployeeController {
 
 	// This will call the service layer to update an employee record
 	@PutMapping("/update/{id}")
-	public ResponseEntity<ResponseDTO> updateEmployee(@PathVariable String id, @Valid @RequestBody EmployeeDTO employee) throws EmployeeNotFound {
-		return employeeService.updateEmployee(id, employee);
+	public ResponseEntity<ResponseDTO> updateEmployee(@PathVariable String id, @Valid @RequestBody EmployeeDTO employee, @RequestParam(name = "token") String token) throws EmployeeNotFound {
+		return employeeService.updateEmployee(id, employee, token);
 	}
 
 	// This will delete an employee record, specified by id, from the database
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<ResponseDTO> deleteEmployee(@PathVariable String id) throws EmployeeNotFound {
-		return employeeService.deleteEmployee(id);
+	public ResponseEntity<ResponseDTO> deleteEmployee(@PathVariable String id, @RequestParam(name = "token") String token) throws EmployeeNotFound {
+		return employeeService.deleteEmployee(id, token);
 	}
 	
 	// This will return a list of all the employees with the department specified in the request
 	@GetMapping("/find/{dept}")
-	public ResponseEntity<ResponseDTO> findEmployeeDept(@PathVariable String dept) throws EmployeeNotFound {
-		return employeeService.findEmployeeByDept(dept);
+	public ResponseEntity<ResponseDTO> findEmployeeDept(@PathVariable String dept, @RequestParam(name = "token") String token) throws EmployeeNotFound {
+		return employeeService.findEmployeeByDept(dept, token);
 	}
 }
